@@ -13,7 +13,7 @@ optimizer = optim.SGD(model.parameters(),0.001,0.9)
 
 data1 = getdata('train')
 data2 = getdata('val')
-trainloss, valloss = [],[]
+trainac, valac = [],[]
 
 def train():
     epochs = 1000
@@ -21,8 +21,6 @@ def train():
 #just training setup ,need to add plot of losses etc.
     for i in range(epochs):
         correct = 0
-        trainl = 0
-        vall = 0
         correctv = 0
         model.train()
         for images,labels in data1:
@@ -35,22 +33,19 @@ def train():
 
             _,predict = torch.max(out.data,1)
             correct += (predict==labels).sum().item()
-            trainl = losst.item()*images.size(0)
 
-        trainloss.append(trainl/70)
+        trainac.append(correct/70)
         
         with torch.no_grad():
             for images,labels in data2:
                 images,labels = images.to(device),labels.to(device)
                 out = model(images)
-                lossv = loss(out,labels)
                 _,predict = torch.max(out.data,1)
                 correctv += (predict==labels).sum().item()
-                vall = lossv.item()*images.size(0)
-            valloss.append(vall/30)
-            print(f"Epoch {i}: train_loss = {trainl/70} | val_loss = {vall/30}")
-        return trainl/70,vall/30
+            valac.append(correctv/30)
+            print(f"Epoch {i}: train_ac = {correct/70} | val_ac = {correctv/30}")
+        return trainac,valac
 
-trainl,vall = train()
+trainac,valac = train()
 
-plot(trainl,vall)
+plot(trainac,valac)
