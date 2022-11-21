@@ -104,7 +104,7 @@ class IncD(nn.Module):
         return torch.cat([b2,ba4,pool],1)
 
 class Inc3(nn.Module):
-    def __init__(self,num_classes,transform=True):
+    def __init__(self,num_classes=3,transform=True):
         super(Inc3,self).__init__()
         self.transform = transform
         self.convlayer = Conv(3,32,3)
